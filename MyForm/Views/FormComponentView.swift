@@ -12,6 +12,7 @@ protocol FormComponentViewProtocol {
     var title: FormComponentView.Title { get }
     var rightItem: UIView? { get set }
     var bottomItem: UIView? { get set }
+    var mode: FormComponentView.Mode { get set }
 }
 
 private struct Constants {
@@ -43,6 +44,11 @@ class FormComponentView: UIView {
         let style: TitleStyle
     }
     
+    enum Mode {
+        case bottomShowing
+        case bottomHidden
+    }
+    
     // MARK: - Views
     private let titleLabel = UILabel()
     private let topContainer = UIView()
@@ -56,9 +62,16 @@ class FormComponentView: UIView {
     var bottomItem: UIView? {
         didSet { configureBottomItem(forNew: bottomItem, old: oldValue) }
     }
+    var mode: Mode = .bottomHidden {
+        didSet { configureMode(mode) }
+    }
+    
+    // MARK: - Private State
+    private var modeConstraints = [NSLayoutConstraint]()
 
     // MARK: - Init
     init(title: Title) {
+        defer { mode = .bottomHidden }
         self.title = title
         super.init(frame: .zero)
         setUpConstraints()
@@ -74,8 +87,7 @@ class FormComponentView: UIView {
             $0.translatesAutoresizingMaskIntoConstraints = false
             addSubview($0)
         })
-        let bottomContainerDefaultHeight = bottomContainer.heightAnchor.constraint(equalToConstant: 0)
-        bottomContainerDefaultHeight.priority = UILayoutPriority(rawValue: 999)
+        
         NSLayoutConstraint.activate([
             topContainer.leftAnchor.constraint(equalTo: leftAnchor),
             topContainer.rightAnchor.constraint(equalTo: rightAnchor),
@@ -84,8 +96,7 @@ class FormComponentView: UIView {
             bottomContainer.leftAnchor.constraint(equalTo: leftAnchor),
             bottomContainer.rightAnchor.constraint(equalTo: rightAnchor),
             bottomContainer.topAnchor.constraint(equalTo: topContainer.bottomAnchor),
-            bottomContainer.bottomAnchor.constraint(equalTo: bottomAnchor),
-            bottomContainerDefaultHeight
+            bottomContainer.heightAnchor.constraint(equalToConstant: Constants.bottomContainerHeight)
             ])
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -102,6 +113,7 @@ class FormComponentView: UIView {
     }
     
     private func styleViews() {
+        clipsToBounds = true
         backgroundColor = .white
     }
     
@@ -111,7 +123,7 @@ class FormComponentView: UIView {
         
         if let new = new {
             new.translatesAutoresizingMaskIntoConstraints = false
-            topContainer.addSubview(new)
+            self.topContainer.addSubview(new)
             NSLayoutConstraint.activate([
                 new.rightAnchor.constraint(equalTo: topContainer.rightAnchor, constant: -10),
                 new.centerYAnchor.constraint(equalTo: topContainer.centerYAnchor),
@@ -131,9 +143,19 @@ class FormComponentView: UIView {
                 new.rightAnchor.constraint(equalTo: bottomContainer.rightAnchor),
                 new.topAnchor.constraint(equalTo: bottomContainer.topAnchor),
                 new.bottomAnchor.constraint(equalTo: bottomContainer.bottomAnchor),
-                new.heightAnchor.constraint(equalToConstant: Constants.bottomContainerHeight)
                 ])
         }
+    }
+    
+    private func configureMode(_ mode: Mode) {
+        NSLayoutConstraint.deactivate(modeConstraints)
+        let bottom: NSLayoutConstraint
+        switch mode {
+        case .bottomHidden: bottom = bottomAnchor.constraint(equalTo: topContainer.bottomAnchor)
+        case .bottomShowing: bottom = bottomAnchor.constraint(equalTo: bottomContainer.bottomAnchor)
+        }
+        NSLayoutConstraint.activate([bottom])
+        modeConstraints = [bottom]
     }
 }
 

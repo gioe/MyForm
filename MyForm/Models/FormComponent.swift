@@ -50,6 +50,30 @@ enum FormComponent {
         case .custom(let component): return component.view
         }
     }
+    
+    func setDelegate(_ delegate: FormComponentDelegate) {
+        switch self {
+        case .picker(let component): component.delegate = delegate
+        case .text(let component): component.delegate = delegate
+        case .custom(let component): component.delegate = delegate
+        default: return
+        }
+    }
+    
+    func configureViewMode(_ mode: FormComponentMode) {
+        switch self {
+        case .picker(let component): component.configureViewForMode(mode)
+        case .text(let component): component.configureViewForMode(mode)
+        case .custom(let component): component.configureViewForMode(mode)
+        default: return
+        }
+    }
+}
+
+extension FormComponent: Equatable {
+    static func == (l: FormComponent, r: FormComponent) -> Bool {
+        return l.view === r.view
+    }
 }
 
 class FormGapComponent: UIView {

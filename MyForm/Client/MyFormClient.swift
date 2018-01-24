@@ -51,7 +51,7 @@ extension MyFormClient: MyFormClientProtocol {
             .text(name)
         ]
         
-        let form = Form(components: components)
+        let form = Form(components: components, formAction: { return })
         return FormViewController(form: form)
     }
 }

@@ -75,7 +75,11 @@ extension FormTextComponent: FormComponentProtocol {
     }
     
     func configureViewForMode(_ mode: FormComponentMode) {
-        return
+        switch mode {
+        case .selected: textField.becomeFirstResponder()
+        case .unselected: textField.resignFirstResponder()
+        default: textField.resignFirstResponder()
+        }
     }
 }
 

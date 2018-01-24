@@ -37,6 +37,7 @@ class FormPickerComponent: NSObject {
     // MARK: - Helpers
     private func setUpComponentView() {
         componentView.rightItem = label
+        componentView.bottomItem = picker
     }
     
     private func setUpPicker() {
@@ -66,13 +67,9 @@ extension FormPickerComponent: FormComponentProtocol {
     
     func configureViewForMode(_ mode: FormComponentMode) {
         switch mode {
-        case .unselected:
-            componentView.bottomItem = nil
-            
-        case .selected:
-            componentView.bottomItem = picker
-            
-        default: return
+        case .unselected: componentView.mode = .bottomHidden
+        case .selected: componentView.mode = .bottomShowing
+        default: componentView.mode = .bottomHidden
         }
     }
 }
@@ -93,6 +90,10 @@ extension FormPickerComponent: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         delegate?.didSelectValue(forComponent: self)
         updateLabel()
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return pickerData[component][row]
     }
 }
 

@@ -24,7 +24,7 @@ typealias FormAction = () -> Void
 protocol FormProtocol: ValidityAscerning {
     var delegate: FormDelegate? { get set }
     var components: [FormComponent] { get }
-//    var formAction: FormAction { get }
+    var formAction: FormAction { get }
 }
 
 protocol FormDelegate: class {
@@ -33,36 +33,38 @@ protocol FormDelegate: class {
 
 private struct Constants {
     static let wrapperTableViewCellIdentifer = "WrapperTableViewCell"
+    static let selectionAnimationDuration: TimeInterval = 0.25
 }
 
 class Form: UIView {
     // MARK: - Layers
     weak var delegate: FormDelegate?
     
-    // MARK: - Exposed State
-    var isValid: Bool {
-        for component in components {
-            if !component.isValid { return false }
-        }
-        return true
-    }
-    
     // MARK: - Views
     private let scrollView = UIScrollView()
     private let stack = UIStackView()
     
+    // MARK: - Interactions
+    private let tap = UITapGestureRecognizer()
+    
     // MARK: - Exposed State
     let components: [FormComponent]
-//    let formAction: FormAction
+    let formAction: FormAction
+    
+    // MARK: - Private State
+    private var selectedComponent: FormComponent? {
+        didSet { configureSelectedComponent(forNew: selectedComponent, old: oldValue) }
+    }
     
     // MARK: - Init
-//    , formAction: @escaping FormAction
-    init(components: [FormComponent]) {
+    init(components: [FormComponent], formAction: @escaping FormAction) {
         self.components = components
-//        self.formAction = formAction
+        self.formAction = formAction
         super.init(frame: .zero)
         setUpConstraints()
         setUpStack()
+        setUpComponents()
+        setUpTap()
         styleViews()
     }
     
@@ -100,14 +102,86 @@ class Form: UIView {
             .forEach({ stack.addArrangedSubview($0) })
     }
     
+    private func setUpComponents() {
+        components.forEach({
+            $0.setDelegate(self)
+            $0.view.isUserInteractionEnabled = true // to enable hit-testing
+        })
+    }
+    
+    private func setUpTap() {
+        tap.numberOfTapsRequired = 1
+        tap.numberOfTouchesRequired = 1
+        tap.cancelsTouchesInView = true
+        tap.delaysTouchesBegan = false
+        tap.delaysTouchesEnded = false
+        tap.addTarget(self, action: #selector(didTap(sender:)))
+        addGestureRecognizer(tap)
+    }
+    
     private func styleViews() {
         scrollView.backgroundColor = .lightGray
     }
+    
+    // MARK: - didSet
+    private func configureSelectedComponent(forNew new: FormComponent?, old: FormComponent?) {
+        old?.configureViewMode(.unselected)
+        new?.configureViewMode(.selected)
+        if let new = new {
+            let converted = scrollView.convert(new.view.frame, from: new.view.superview)
+            scrollView.scrollRectToVisible(converted, animated: true)
+        }
+        UIView.animate(withDuration: Constants.selectionAnimationDuration, animations: { self.layoutIfNeeded() })
+    }
+    
+    // MARK: - View Actions
+    @objc private func didTap(sender: UITapGestureRecognizer) {
+        let point = sender.location(in: self)
+        if let component = componentForPoint(point) {
+            // if the selected component was tapped, unselect it
+            guard component != selectedComponent else {
+                selectedComponent = nil
+                return
+            }
+            selectedComponent = component
+        }
+    }
+    
+    private func componentForPoint(_ point: CGPoint) -> FormComponent? {
+        guard var hit = hitTest(point, with: nil) else { return nil }
+        while hit !== self {
+            if let index = components.index(where: { $0.view === hit }) {
+                return components[index]
+            }
+            if let superview = hit.superview { hit = superview }
+            else { break }
+        }
+        return nil
+    }
 }
 
+// MARK: - FormProtocol
 extension Form: FormProtocol {
     
 }
+
+// MARK: - ValidityAscerning
+extension Form: ValidityAscerning {
+    var isValid: Bool {
+        for component in components {
+            if !component.isValid { return false }
+        }
+        return true
+    }
+}
+
+// MARK: - FormComponentDelegate
+extension Form: FormComponentDelegate {
+    func didSelectValue(forComponent component: FormComponentProtocol) {
+        
+    }
+}
+
 
 
 
