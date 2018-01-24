@@ -12,6 +12,15 @@
 		E23332CF2017C16F009F4987 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E23332CD2017C16F009F4987 /* Main.storyboard */; };
 		E23332D12017C16F009F4987 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E23332D02017C16F009F4987 /* Assets.xcassets */; };
 		E23332D42017C16F009F4987 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E23332D22017C16F009F4987 /* LaunchScreen.storyboard */; };
+		E23332DD2017C1A5009F4987 /* FormComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23332DC2017C1A5009F4987 /* FormComponent.swift */; };
+		E23332E22017C1D6009F4987 /* FormPickerComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23332E12017C1D6009F4987 /* FormPickerComponent.swift */; };
+		E23332E42017C1F1009F4987 /* FormTextComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23332E32017C1F1009F4987 /* FormTextComponent.swift */; };
+		E23332E62017C200009F4987 /* FormCustomComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23332E52017C200009F4987 /* FormCustomComponent.swift */; };
+		E23332E82017C258009F4987 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23332E72017C258009F4987 /* Protocols.swift */; };
+		E23332EC2017C334009F4987 /* Form.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23332EB2017C334009F4987 /* Form.swift */; };
+		E23332EE2017C91B009F4987 /* FormComponentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23332ED2017C91B009F4987 /* FormComponentView.swift */; };
+		E23332F12018B7AD009F4987 /* MyFormClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23332F02018B7AD009F4987 /* MyFormClient.swift */; };
+		E23332F32018BC46009F4987 /* FormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23332F22018BC46009F4987 /* FormViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +31,15 @@
 		E23332D02017C16F009F4987 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E23332D32017C16F009F4987 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E23332D52017C16F009F4987 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E23332DC2017C1A5009F4987 /* FormComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormComponent.swift; sourceTree = "<group>"; };
+		E23332E12017C1D6009F4987 /* FormPickerComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormPickerComponent.swift; sourceTree = "<group>"; };
+		E23332E32017C1F1009F4987 /* FormTextComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTextComponent.swift; sourceTree = "<group>"; };
+		E23332E52017C200009F4987 /* FormCustomComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormCustomComponent.swift; sourceTree = "<group>"; };
+		E23332E72017C258009F4987 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
+		E23332EB2017C334009F4987 /* Form.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Form.swift; sourceTree = "<group>"; };
+		E23332ED2017C91B009F4987 /* FormComponentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FormComponentView.swift; path = MyForm/Views/FormComponentView.swift; sourceTree = SOURCE_ROOT; };
+		E23332F02018B7AD009F4987 /* MyFormClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFormClient.swift; sourceTree = "<group>"; };
+		E23332F22018BC46009F4987 /* FormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +72,9 @@
 		E23332C82017C16F009F4987 /* MyForm */ = {
 			isa = PBXGroup;
 			children = (
+				E23332EF2018B77D009F4987 /* Client */,
+				E23332DE2017C1B8009F4987 /* Views */,
+				E23332DB2017C174009F4987 /* Models */,
 				E23332C92017C16F009F4987 /* AppDelegate.swift */,
 				E23332CB2017C16F009F4987 /* ViewController.swift */,
 				E23332CD2017C16F009F4987 /* Main.storyboard */,
@@ -62,6 +83,36 @@
 				E23332D52017C16F009F4987 /* Info.plist */,
 			);
 			path = MyForm;
+			sourceTree = "<group>";
+		};
+		E23332DB2017C174009F4987 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E23332DC2017C1A5009F4987 /* FormComponent.swift */,
+				E23332E12017C1D6009F4987 /* FormPickerComponent.swift */,
+				E23332E32017C1F1009F4987 /* FormTextComponent.swift */,
+				E23332E52017C200009F4987 /* FormCustomComponent.swift */,
+				E23332E72017C258009F4987 /* Protocols.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		E23332DE2017C1B8009F4987 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E23332EB2017C334009F4987 /* Form.swift */,
+				E23332F22018BC46009F4987 /* FormViewController.swift */,
+				E23332ED2017C91B009F4987 /* FormComponentView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E23332EF2018B77D009F4987 /* Client */ = {
+			isa = PBXGroup;
+			children = (
+				E23332F02018B7AD009F4987 /* MyFormClient.swift */,
+			);
+			path = Client;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -136,8 +187,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E23332E62017C200009F4987 /* FormCustomComponent.swift in Sources */,
+				E23332F12018B7AD009F4987 /* MyFormClient.swift in Sources */,
+				E23332DD2017C1A5009F4987 /* FormComponent.swift in Sources */,
+				E23332EE2017C91B009F4987 /* FormComponentView.swift in Sources */,
+				E23332E22017C1D6009F4987 /* FormPickerComponent.swift in Sources */,
 				E23332CC2017C16F009F4987 /* ViewController.swift in Sources */,
+				E23332E42017C1F1009F4987 /* FormTextComponent.swift in Sources */,
+				E23332EC2017C334009F4987 /* Form.swift in Sources */,
 				E23332CA2017C16F009F4987 /* AppDelegate.swift in Sources */,
+				E23332E82017C258009F4987 /* Protocols.swift in Sources */,
+				E23332F32018BC46009F4987 /* FormViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
