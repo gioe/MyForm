@@ -10,11 +10,11 @@ import UIKit
 
 protocol FormProtocol {
     var delegate: FormDelegate? { get set }
-    var components: [FormComponent] { get }
+    var components: [FormComponent] { get set }
 }
 
 protocol FormDelegate: class {
-    
+    func didSelectValue(forComponent component: FormComponentProtocol)
 }
 
 private struct Constants {
@@ -34,7 +34,9 @@ class Form: UIView {
     private let tap = UITapGestureRecognizer()
     
     // MARK: - Exposed State
-    let components: [FormComponent]
+    var components: [FormComponent] = [] {
+        didSet { configureComponents(forNew: components, old: oldValue) }
+    }
     
     // MARK: - Private State
     private var selectedComponent: FormComponent? {
@@ -42,12 +44,10 @@ class Form: UIView {
     }
     
     // MARK: - Init
-    init(components: [FormComponent]) {
-        self.components = components
+    init() {
         super.init(frame: .zero)
         setUpConstraints()
         setUpStack()
-        setUpComponents()
         setUpTap()
         styleViews()
         setUpKeyboardNotifications()
@@ -82,16 +82,6 @@ class Form: UIView {
         stack.distribution = .fill
         stack.alignment = .fill
         stack.spacing = 0.5
-        components
-            .map({ $0.view })
-            .forEach({ stack.addArrangedSubview($0) })
-    }
-    
-    private func setUpComponents() {
-        components.forEach({
-            $0.setDelegate(self)
-            $0.view.isUserInteractionEnabled = true // to enable hit-testing
-        })
     }
     
     private func setUpTap() {
@@ -122,6 +112,17 @@ class Form: UIView {
             animations: { self.layoutIfNeeded() },
             completion: { _ in if let new = new { self.scrollComponentToVisible(new) } }
         )
+    }
+    
+    private func configureComponents(forNew new: [FormComponent], old: [FormComponent]) {
+        old.forEach { $0.setDelegate(nil) }
+        stack.arrangedSubviews.forEach { stack.removeArrangedSubview($0) }
+        
+        new.forEach {
+            $0.setDelegate(self)
+            $0.view.isUserInteractionEnabled = true // to enable hit-testing
+            stack.addArrangedSubview($0.view)
+        }
     }
     
     // MARK: - View Actions
@@ -173,7 +174,7 @@ extension Form: FormProtocol {}
 // MARK: - FormComponentDelegate
 extension Form: FormComponentDelegate {
     func didSelectValue(forComponent component: FormComponentProtocol) {
-        
+        delegate?.didSelectValue(forComponent: component)
     }
 }
 

@@ -39,7 +39,7 @@ extension FormComponent {
         }
     }
     
-    func setDelegate(_ delegate: FormComponentDelegate) {
+    func setDelegate(_ delegate: FormComponentDelegate?) {
         switch self {
         case .component(var component): component.delegate = delegate
         default: return

@@ -57,22 +57,6 @@ class FormPickerComponent: NSObject {
 
 // MARK: - FormPickerComponentProtocol
 extension FormPickerComponent: FormPickerComponentProtocol {
-    
-}
-
-// MARK: - FormComponentProtocol
-extension FormPickerComponent: FormComponentProtocol {
-    var isValid: Bool { return true }
-    var view: UIView { return componentView as UIView }
-    
-    func configureViewForMode(_ mode: FormComponentMode) {
-        switch mode {
-        case .unselected: componentView.mode = .bottomHidden
-        case .selected: componentView.mode = .bottomShowing
-        default: componentView.mode = .bottomHidden
-        }
-    }
-    
     var selectedValues: [String] {
         var strings = [String]()
         for component in 0..<numberOfComponents(in: picker) {
@@ -93,6 +77,19 @@ extension FormPickerComponent: FormComponentProtocol {
         }
         for (index, valueIndex) in indices.enumerated() {
             picker.selectRow(valueIndex, inComponent: index, animated: false)
+        }
+    }
+}
+
+// MARK: - FormComponentProtocol
+extension FormPickerComponent: FormComponentProtocol {
+    var view: UIView { return componentView as UIView }
+    
+    func configureViewForMode(_ mode: FormComponentMode) {
+        switch mode {
+        case .unselected: componentView.mode = .bottomHidden
+        case .selected: componentView.mode = .bottomShowing
+        default: componentView.mode = .bottomHidden
         }
     }
 }

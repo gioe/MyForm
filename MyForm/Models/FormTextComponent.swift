@@ -8,9 +8,7 @@
 
 import UIKit
 
-typealias TextValidator = (String) -> Bool
 protocol FormTextComponentProtocol {
-    var textValidator: TextValidator { get set }
     var keyboardType: UIKeyboardType { get set }
     var placeholder: FormTextComponent.Placeholder { get set }
     var selectedValue: String? { get set }
@@ -36,7 +34,6 @@ class FormTextComponent: NSObject {
     var delegate: FormComponentDelegate?
     
     // MARK: - Exposed State
-    var textValidator: TextValidator = FormTextComponent.defaultTextValidator
     var placeholder: FormTextComponent.Placeholder = .optional {
         didSet { configurePlaceholder(placeholder) }
     }
@@ -88,11 +85,6 @@ extension FormTextComponent: FormTextComponentProtocol {
 
 // MARK: - FormComponentProtocol
 extension FormTextComponent: FormComponentProtocol {
-    var isValid: Bool {
-        guard let text = textField.text else { return false }
-        return textValidator(text)
-    }
-    
     var view: UIView {
         return componentView as UIView
     }
@@ -110,16 +102,6 @@ extension FormTextComponent: FormComponentProtocol {
 extension FormTextComponent: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         delegate?.didSelectValue(forComponent: self)
-    }
-}
-
-// MARK: - Defaults
-extension FormTextComponent {
-    static var defaultTextValidator: TextValidator {
-        return { string in
-            guard string != "" else { return false }
-            return true
-        }
     }
 }
 
