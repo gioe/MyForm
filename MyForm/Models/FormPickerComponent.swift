@@ -10,6 +10,12 @@ import UIKit
 
 protocol FormPickerComponentProtocol {
     var pickerData: [[String]] { get }
+    var selectedValues: [String] { get }
+    func setSelectedValues(_ values: [String]) throws
+}
+
+enum FormPickerComponentError: Error {
+    case setSelectedValuesFailed(value: String, index: Int, message: String)
 }
 
 class FormPickerComponent: NSObject {
@@ -45,13 +51,7 @@ class FormPickerComponent: NSObject {
         picker.delegate = self
     }
     private func updateLabel() {
-        var selectedStrings = [String]()
-        for component in 0..<numberOfComponents(in: picker) {
-            let selectedRow = picker.selectedRow(inComponent: component)
-            let selectedString = pickerData[component][selectedRow]
-            selectedStrings.append(selectedString)
-        }
-        label.text = selectedStrings.joined(separator: " ")
+        label.text = selectedValues.joined(separator: " ")
     }
 }
 
@@ -70,6 +70,29 @@ extension FormPickerComponent: FormComponentProtocol {
         case .unselected: componentView.mode = .bottomHidden
         case .selected: componentView.mode = .bottomShowing
         default: componentView.mode = .bottomHidden
+        }
+    }
+    
+    var selectedValues: [String] {
+        var strings = [String]()
+        for component in 0..<numberOfComponents(in: picker) {
+            let selectedRow = picker.selectedRow(inComponent: component)
+            let string = pickerData[component][selectedRow]
+            strings.append(string)
+        }
+        return strings
+    }
+    
+    func setSelectedValues(_ values: [String]) throws {
+        var indices = [Int]()
+        for (index, value) in values.enumerated() {
+            guard let valueIndex = pickerData[index].index(where: { $0 == value }) else {
+                throw FormPickerComponentError.setSelectedValuesFailed(value: value, index: index, message: "pickerData does not contain the passed-in value")
+            }
+            indices.append(valueIndex)
+        }
+        for (index, valueIndex) in indices.enumerated() {
+            picker.selectRow(valueIndex, inComponent: index, animated: false)
         }
     }
 }

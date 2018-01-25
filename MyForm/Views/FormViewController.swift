@@ -8,10 +8,6 @@
 
 import UIKit
 
-protocol FormViewControllerProtocol {
-    var form: Form { get }
-}
-
 class FormViewController: UIViewController {
     // MARK: - Views
     let form: Form
@@ -32,29 +28,4 @@ class FormViewController: UIViewController {
     override func loadView() {
         self.view = form
     }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setUpKeyboardNotifications()
-    }
-    
-    // MARK: - Helpers
-    private func setUpKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(sender:)), name: .UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(sender:)), name: .UIKeyboardWillHide, object: nil)
-    }
-    
-    // MARK: - Keyboard Actions
-    @objc private func keyboardWillShow(sender: Notification) {
-        
-    }
-    
-    @objc private func keyboardWillHide(sender: Notification) {
-        
-    }
-}
-
-// MARK: - FormViewControllerProtocol
-extension FormViewController: FormViewControllerProtocol {
-    
 }

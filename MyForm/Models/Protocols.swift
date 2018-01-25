@@ -8,6 +8,3 @@
 
 import Foundation
 
-protocol ValidityAscerning {
-    var isValid: Bool { get }
-}

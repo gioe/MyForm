@@ -10,26 +10,44 @@ import UIKit
 
 typealias TextValidator = (String) -> Bool
 protocol FormTextComponentProtocol {
-    var textValidator: TextValidator { get }
+    var textValidator: TextValidator { get set }
     var keyboardType: UIKeyboardType { get set }
-    var placeholder: String? { get set }
+    var placeholder: FormTextComponent.Placeholder { get set }
+    var selectedValue: String? { get set }
 }
 
 class FormTextComponent: NSObject {
+    // MARK: - Namespaced
+    enum Placeholder {
+        case required
+        case optional
+        case custom(String)
+        
+        var string: String {
+            switch self {
+            case .required: return "required"
+            case .optional: return "optional"
+            case .custom(let string): return string
+            }
+        }
+    }
+    
     // MARK: - Layers
     var delegate: FormComponentDelegate?
     
     // MARK: - Exposed State
-    let textValidator: (String) -> Bool
+    var textValidator: TextValidator = FormTextComponent.defaultTextValidator
+    var placeholder: FormTextComponent.Placeholder = .optional {
+        didSet { configurePlaceholder(placeholder) }
+    }
     
     // MARK: - Private State
     private let componentView: FormComponentView
     private let textField = UITextField()
 
     // MARK: - Init
-    init(title: FormComponentView.Title, textValidator: @escaping TextValidator) {
+    init(title: FormComponentView.Title) {
         self.componentView = FormComponentView(title: title)
-        self.textValidator = textValidator
         super.init()
         setUpComponentView()
         setUpTextField()
@@ -48,6 +66,11 @@ class FormTextComponent: NSObject {
     private func styleViews() {
         
     }
+    
+    // MARK: - didSet
+    private func configurePlaceholder(_ placeholder: Placeholder) {
+        textField.placeholder = placeholder.string
+    }
 }
 
 // MARK: - FormTextComponentProtocol
@@ -57,9 +80,9 @@ extension FormTextComponent: FormTextComponentProtocol {
         set { textField.keyboardType = newValue }
     }
     
-    var placeholder: String? {
-        get { return textField.placeholder }
-        set { textField.placeholder = newValue }
+    var selectedValue: String? {
+        get { return textField.text }
+        set { textField.text = newValue }
     }
 }
 
@@ -90,6 +113,15 @@ extension FormTextComponent: UITextFieldDelegate {
     }
 }
 
+// MARK: - Defaults
+extension FormTextComponent {
+    static var defaultTextValidator: TextValidator {
+        return { string in
+            guard string != "" else { return false }
+            return true
+        }
+    }
+}
 
 
 

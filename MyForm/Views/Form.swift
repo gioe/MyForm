@@ -8,27 +8,13 @@
 
 import UIKit
 
-/* What should Form do for you?
- - convenient form construction
- - delegate interaction events
- - setting form component values (maybe a job for FormComponent)
- - respond to keyboard presentation (maybe a job for FormViewController; maybe its automatically handled by the table view method scrollToRow())
- */
-
-/* What should FormComponent do for you?
- - delegate value selection events
- - inject aesthetic / display configuration
- */
-
-typealias FormAction = () -> Void
-protocol FormProtocol: ValidityAscerning {
+protocol FormProtocol {
     var delegate: FormDelegate? { get set }
     var components: [FormComponent] { get }
-    var formAction: FormAction { get }
 }
 
 protocol FormDelegate: class {
-    func didSelectComponent(_ component: FormComponent)
+    
 }
 
 private struct Constants {
@@ -49,7 +35,6 @@ class Form: UIView {
     
     // MARK: - Exposed State
     let components: [FormComponent]
-    let formAction: FormAction
     
     // MARK: - Private State
     private var selectedComponent: FormComponent? {
@@ -57,15 +42,15 @@ class Form: UIView {
     }
     
     // MARK: - Init
-    init(components: [FormComponent], formAction: @escaping FormAction) {
+    init(components: [FormComponent]) {
         self.components = components
-        self.formAction = formAction
         super.init(frame: .zero)
         setUpConstraints()
         setUpStack()
         setUpComponents()
         setUpTap()
         styleViews()
+        setUpKeyboardNotifications()
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError() }
@@ -123,15 +108,20 @@ class Form: UIView {
         scrollView.backgroundColor = .lightGray
     }
     
+    private func setUpKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(sender:)), name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(sender:)), name: .UIKeyboardWillHide, object: nil)
+    }
+    
     // MARK: - didSet
     private func configureSelectedComponent(forNew new: FormComponent?, old: FormComponent?) {
-        old?.configureViewMode(.unselected)
-        new?.configureViewMode(.selected)
-        if let new = new {
-            let converted = scrollView.convert(new.view.frame, from: new.view.superview)
-            scrollView.scrollRectToVisible(converted, animated: true)
-        }
-        UIView.animate(withDuration: Constants.selectionAnimationDuration, animations: { self.layoutIfNeeded() })
+        old?.configureViewForMode(.unselected)
+        new?.configureViewForMode(.selected)
+        UIView.animate(
+            withDuration: Constants.selectionAnimationDuration,
+            animations: { self.layoutIfNeeded() },
+            completion: { _ in if let new = new { self.scrollComponentToVisible(new) } }
+        )
     }
     
     // MARK: - View Actions
@@ -158,22 +148,27 @@ class Form: UIView {
         }
         return nil
     }
+    
+    private func scrollComponentToVisible(_ component: FormComponent) {
+        let converted = scrollView.convert(component.view.frame, from: component.view.superview)
+        scrollView.scrollRectToVisible(converted, animated: true)
+    }
+    
+    // MARK: - Keyboard Actions
+    @objc private func keyboardWillShow(sender: Notification) {
+        guard let userInfo = sender.userInfo, let keyboardFinalFrame = userInfo[UIKeyboardFrameEndUserInfoKey] as? CGRect else { return }
+        let convertedFrame = self.convert(frame, to: nil)
+        let intersect: CGFloat = convertedFrame.origin.y + convertedFrame.height - keyboardFinalFrame.origin.y
+        scrollView.contentInset.bottom = intersect
+    }
+    
+    @objc private func keyboardWillHide(sender: Notification) {
+        scrollView.contentInset.bottom = 0
+    }
 }
 
 // MARK: - FormProtocol
-extension Form: FormProtocol {
-    
-}
-
-// MARK: - ValidityAscerning
-extension Form: ValidityAscerning {
-    var isValid: Bool {
-        for component in components {
-            if !component.isValid { return false }
-        }
-        return true
-    }
-}
+extension Form: FormProtocol {}
 
 // MARK: - FormComponentDelegate
 extension Form: FormComponentDelegate {

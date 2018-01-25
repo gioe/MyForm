@@ -18,7 +18,6 @@ protocol FormComponentViewProtocol {
 private struct Constants {
     static let topContainerHeight: CGFloat = 50
     static let bottomContainerHeight: CGFloat = 120
-    static let rightItemWidth: CGFloat = 100
 }
 
 class FormComponentView: UIView {
@@ -126,8 +125,7 @@ class FormComponentView: UIView {
             self.topContainer.addSubview(new)
             NSLayoutConstraint.activate([
                 new.rightAnchor.constraint(equalTo: topContainer.rightAnchor, constant: -10),
-                new.centerYAnchor.constraint(equalTo: topContainer.centerYAnchor),
-                new.widthAnchor.constraint(equalToConstant: Constants.rightItemWidth)
+                new.centerYAnchor.constraint(equalTo: topContainer.centerYAnchor)
                 ])
         }
     }

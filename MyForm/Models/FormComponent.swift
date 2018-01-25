@@ -14,7 +14,7 @@ enum FormComponentMode {
     case error
 }
 
-protocol FormComponentProtocol: ValidityAscerning {
+protocol FormComponentProtocol {
     var delegate: FormComponentDelegate? { get set }
     var view: UIView { get }
     func configureViewForMode(_ mode: FormComponentMode)
@@ -27,44 +27,28 @@ protocol FormComponentDelegate {
 enum FormComponent {
     case gap(CGFloat)
     case view(UIView)
-    case picker(FormPickerComponent)
-    case text(FormTextComponent)
-    case custom(FormCustomComponent)
-    
-    var isValid: Bool {
-        switch self {
-        case .gap(_): return true
-        case .view(_): return true
-        case .picker(let component): return component.isValid
-        case .text(let component): return component.isValid
-        case .custom(let component): return component.isValid
-        }
-    }
-    
+    case component(FormComponentProtocol)
+}
+
+extension FormComponent {
     var view: UIView {
         switch self {
         case .gap(let height): return FormGapComponent(height: height)
         case .view(let view): return view
-        case .picker(let component): return component.view
-        case .text(let component): return component.view
-        case .custom(let component): return component.view
+        case .component(let component): return component.view
         }
     }
     
     func setDelegate(_ delegate: FormComponentDelegate) {
         switch self {
-        case .picker(let component): component.delegate = delegate
-        case .text(let component): component.delegate = delegate
-        case .custom(let component): component.delegate = delegate
+        case .component(var component): component.delegate = delegate
         default: return
         }
     }
     
-    func configureViewMode(_ mode: FormComponentMode) {
+    func configureViewForMode(_ mode: FormComponentMode) {
         switch self {
-        case .picker(let component): component.configureViewForMode(mode)
-        case .text(let component): component.configureViewForMode(mode)
-        case .custom(let component): component.configureViewForMode(mode)
+        case .component(let component): component.configureViewForMode(mode)
         default: return
         }
     }
