@@ -9,6 +9,9 @@
 import UIKit
 
 class FormCustomComponent: FormComponentProtocol {
+    var key: CodingKey? = Person.PersonCodingKeys.age
+    var outPut: [String : Any] = [:]
+    
     var isValid: Bool = false
     var delegate: FormComponentDelegate?
     let view = UIView()

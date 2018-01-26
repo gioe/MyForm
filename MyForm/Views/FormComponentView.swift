@@ -161,14 +161,3 @@ class FormComponentView: UIView {
 extension FormComponentView: FormComponentViewProtocol {
     
 }
-
-
-
-
-
-
-
-
-
-
-

@@ -23,8 +23,8 @@ class CalculatorViewController: UIViewController {
     private let form = Form()
     
     // MARK: - Private State
-    private let calories = CalculatorViewController.createCalories()
-    private let saturatedFat = CalculatorViewController.createSaturatedFat()
+    private let calories = CalculatorViewController.createCalories(key: Person.PersonCodingKeys.name)
+    private let saturatedFat = CalculatorViewController.createSaturatedFat(key: Person.PersonCodingKeys.age)
     private let carbohydrates = CalculatorViewController.createCarbohydrates()
     private let fiber = CalculatorViewController.createFiber()
     private let sugar = CalculatorViewController.createSugar()
@@ -93,43 +93,43 @@ extension CalculatorViewController {
         return label
     }
     
-    private static func createCalories() -> FormTextComponent {
-        let component = FormTextComponent(title: FormComponentView.Title(string: "Calories", style: .major))
+    private static func createCalories(key: CodingKey? = nil) -> FormTextComponent {
+        let component = FormTextComponent(title: FormComponentView.Title(string: "Calories", style: .major), key: key)
         component.placeholder = .optional
         return component
     }
     
-    private static func createSaturatedFat() -> FormTextComponent {
-        let component = FormTextComponent(title: FormComponentView.Title(string: "Saturated Fat", style: .major))
+    private static func createSaturatedFat(key: CodingKey? = nil) -> FormTextComponent {
+        let component = FormTextComponent(title: FormComponentView.Title(string: "Saturated Fat", style: .major), key: key)
         component.placeholder = .required
         return component
     }
     
-    private static func createCarbohydrates() -> FormTextComponent {
-        let component = FormTextComponent(title: FormComponentView.Title(string: "Carbohydrates (g)", style: .major))
+    private static func createCarbohydrates(key: CodingKey? = nil) -> FormTextComponent {
+        let component = FormTextComponent(title: FormComponentView.Title(string: "Carbohydrates (g)", style: .major), key: key)
         component.placeholder = .optional
         return component
     }
     
-    private static func createFiber() -> FormTextComponent {
-        let component = FormTextComponent(title: FormComponentView.Title(string: "Fiber", style: .minor))
+    private static func createFiber(key: CodingKey? = nil) -> FormTextComponent {
+        let component = FormTextComponent(title: FormComponentView.Title(string: "Fiber", style: .minor), key: key)
         component.placeholder = .optional
         return component
     }
     
-    private static func createSugar() -> FormTextComponent {
-        let component = FormTextComponent(title: FormComponentView.Title(string: "Sugar", style: .minor))
+    private static func createSugar(key: CodingKey? = nil) -> FormTextComponent {
+        let component = FormTextComponent(title: FormComponentView.Title(string: "Sugar", style: .minor), key: key)
         component.placeholder = .required
         return component
     }
     
-    private static func createProtein() -> FormTextComponent {
-        let component = FormTextComponent(title: FormComponentView.Title(string: "Protein (g)", style: .major))
+    private static func createProtein(key: CodingKey? = nil) -> FormTextComponent {
+        let component = FormTextComponent(title: FormComponentView.Title(string: "Protein (g)", style: .major), key: key)
         component.placeholder = .required
         return component
     }
     
-    private static func createServings() -> FormPickerComponent {
+    private static func createServings(key: CodingKey? = nil) -> FormPickerComponent {
         let servingsData: [[String]] = [
             (0..<1000).map({ String($0) }),
             ["1/8", "1/4", "1/2"],
@@ -139,13 +139,13 @@ extension CalculatorViewController {
         return component
     }
     
-    private static func createName() -> FormTextComponent {
-        let component = FormTextComponent(title: FormComponentView.Title(string: "Name", style: .major))
+    private static func createName(key: CodingKey? = nil) -> FormTextComponent {
+        let component = FormTextComponent(title: FormComponentView.Title(string: "Name", style: .major), key: key)
         component.placeholder = .required
         return component
     }
     
-    private static func createCreateFood() -> FormButtonComponent {
+    private static func createCreateFood(key: CodingKey? = nil) -> FormButtonComponent {
         let component = FormButtonComponent()
         component.button.setTitle("Create Food", for: .normal)
         return component

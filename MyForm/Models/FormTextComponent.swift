@@ -33,6 +33,9 @@ class FormTextComponent: NSObject {
     // MARK: - Layers
     var delegate: FormComponentDelegate?
     
+    var key: CodingKey?
+    var outPut: [String : Any] = [:]
+    
     // MARK: - Exposed State
     var placeholder: FormTextComponent.Placeholder = .optional {
         didSet { configurePlaceholder(placeholder) }
@@ -43,7 +46,8 @@ class FormTextComponent: NSObject {
     private let textField = UITextField()
 
     // MARK: - Init
-    init(title: FormComponentView.Title) {
+    init(title: FormComponentView.Title, key: CodingKey?) {
+        self.key = key
         self.componentView = FormComponentView(title: title)
         super.init()
         setUpComponentView()
@@ -101,6 +105,11 @@ extension FormTextComponent: FormComponentProtocol {
 // MARK: - UITextFieldDelegate
 extension FormTextComponent: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
+        
+        if let key = key, let text = textField.text {
+            outPut = [key.stringValue : text]
+        }
+        
         delegate?.didSelectValue(forComponent: self)
     }
 }

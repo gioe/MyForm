@@ -11,6 +11,8 @@ import UIKit
 protocol FormProtocol {
     var delegate: FormDelegate? { get set }
     var components: [FormComponent] { get set }
+    associatedtype FormType
+    var type: FormType { get set }
 }
 
 protocol FormDelegate: class {
@@ -42,6 +44,8 @@ class Form: UIView {
     private var selectedComponent: FormComponent? {
         didSet { configureSelectedComponent(forNew: selectedComponent, old: oldValue) }
     }
+    
+    public var type = Person.self
     
     // MARK: - Init
     init() {
@@ -173,18 +177,16 @@ extension Form: FormProtocol {}
 
 // MARK: - FormComponentDelegate
 extension Form: FormComponentDelegate {
+    func didSubmitForm(forComponent component: FormComponentProtocol) {}
+    
     func didSelectValue(forComponent component: FormComponentProtocol) {
         delegate?.didSelectValue(forComponent: component)
+    
+        //decode creates a model fr
+        
+        guard let data = try? JSONSerialization.gie/data(withJSONObject: component.outPut, options: []), let parsedData = try? JSONDecoder().decode(type, from: data) else {
+            return
+        }
+        print(parsedData)
     }
 }
-
-
-
-
-
-
-
-
-
-
-

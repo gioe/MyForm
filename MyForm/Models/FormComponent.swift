@@ -18,10 +18,13 @@ protocol FormComponentProtocol {
     var delegate: FormComponentDelegate? { get set }
     var view: UIView { get }
     func configureViewForMode(_ mode: FormComponentMode)
+    var key: CodingKey? { get set }
+    var outPut: [String: Any] { get set }
 }
 
 protocol FormComponentDelegate {
     func didSelectValue(forComponent component: FormComponentProtocol)
+    func didSubmitForm(forComponent component: FormComponentProtocol)
 }
 
 enum FormComponent {
@@ -83,8 +86,3 @@ class FormGapComponent: UIView {
         backgroundColor = .clear
     }
 }
-
-
-
-
-

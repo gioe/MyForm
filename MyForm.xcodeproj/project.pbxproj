@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		425FD2A3201A917200486236 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425FD2A2201A917200486236 /* Person.swift */; };
 		E23332CA2017C16F009F4987 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23332C92017C16F009F4987 /* AppDelegate.swift */; };
 		E23332CC2017C16F009F4987 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23332CB2017C16F009F4987 /* ViewController.swift */; };
 		E23332CF2017C16F009F4987 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E23332CD2017C16F009F4987 /* Main.storyboard */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		425FD2A2201A917200486236 /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		E23332C62017C16F009F4987 /* MyForm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyForm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E23332C92017C16F009F4987 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E23332CB2017C16F009F4987 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 				E2333321201A530D009F4987 /* FormButtonComponent.swift */,
 				E23332F420192AA1009F4987 /* FormButton.swift */,
 				E23332E72017C258009F4987 /* Protocols.swift */,
+				425FD2A2201A917200486236 /* Person.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -205,6 +208,7 @@
 				E2333322201A530D009F4987 /* FormButtonComponent.swift in Sources */,
 				E23332DD2017C1A5009F4987 /* FormComponent.swift in Sources */,
 				E23332F520192AA1009F4987 /* FormButton.swift in Sources */,
+				425FD2A3201A917200486236 /* Person.swift in Sources */,
 				E23332EE2017C91B009F4987 /* FormComponentView.swift in Sources */,
 				E23332E22017C1D6009F4987 /* FormPickerComponent.swift in Sources */,
 				E23332CC2017C16F009F4987 /* ViewController.swift in Sources */,

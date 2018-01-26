@@ -21,6 +21,8 @@ enum FormPickerComponentError: Error {
 class FormPickerComponent: NSObject {
     // MARK: - Layers
     var delegate: FormComponentDelegate?
+    var key: CodingKey? = Person.PersonCodingKeys.age
+    var outPut: [String: Any] = [:]
     
     // MARK: - Views
     private let componentView: FormComponentView
